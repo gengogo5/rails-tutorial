@@ -30,7 +30,7 @@ RSpec.describe StaticPagesController, type: :controller do
     end
 
     it "titleに期待した文字列が表示されること" do
-      assert_select "title", "Home | #{base_title}"
+      assert_select "title", "#{base_title}"
     end
   end
 
