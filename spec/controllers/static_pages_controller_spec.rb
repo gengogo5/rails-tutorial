@@ -1,8 +1,9 @@
 require 'rails_helper'
 
-#TODO
-#assert_select以外に適切な書き方は無い？expect使うやつ
-
+# 疑問
+# Integration testでないのにCapybaraを使うのは適切なのか？
+# titleの表示を確認するのはフィーチャースペックではない？
+# get :helpと visit help_pathの違いってなんだ
 RSpec.describe StaticPagesController, type: :controller do
 
   # beforeでインスタンス変数を作る方法もある
@@ -17,36 +18,20 @@ RSpec.describe StaticPagesController, type: :controller do
     end
   end
 
-  describe "GET #home" do
-    render_views
-
-    # これぐらいならbeforeでやらなくてもいいかもしれない？
-    before do
-      get :home
-    end
-
-    it "レスポンスがSUCCESSであること" do
-      expect(response).to have_http_status(:success)
-    end
-
-    it "titleに期待した文字列が表示されること" do
-      assert_select "title", "#{base_title}"
-    end
-  end
-
   describe "GET #help" do
     render_views
 
     before do
-      get :help
+      visit help_path
     end
 
     it "レスポンスがSUCCESSであること" do
-      expect(response).to have_http_status(:success)
+      # 複数の実装方法を知るために書き方を統一していない
+      expect(response).to be_success
     end
 
     it "titleに期待した文字列が表示されること" do
-      assert_select "title", "Help | #{base_title}"
+      expect(page).to have_title "Help | #{base_title}"
     end
   end
 
@@ -54,15 +39,15 @@ RSpec.describe StaticPagesController, type: :controller do
     render_views
 
     before do
-      get :about
+      visit about_path
     end
 
-    it "レスポンスがSUCCESSであること" do
-      expect(response).to have_http_status(:success)
+    it "レスポンスが200であること" do
+      expect(response).to have_http_status "200"
     end
 
     it "titleに期待した文字列が表示されること" do
-      assert_select "title", "About | #{base_title}"
+      expect(page).to have_title "About | #{base_title}"
     end
   end
 
@@ -70,7 +55,7 @@ RSpec.describe StaticPagesController, type: :controller do
     render_views
 
     before do
-      get :contact
+      visit contact_path
     end
 
     it "レスポンスがSUCCESSであること" do
@@ -78,7 +63,7 @@ RSpec.describe StaticPagesController, type: :controller do
     end
 
     it "titleに期待した文字列が表示されること" do
-      assert_select "title", "Contact | #{base_title}"
+      expect(page).to have_title "Contact | #{base_title}"
     end
   end
 end
