@@ -23,5 +23,8 @@ module SampleApp
         routing_specs: false,
         request_specs: false
     end
+
+    # メッセージ日本語化
+    config.i18n.default_locale = :ja
   end
 end
