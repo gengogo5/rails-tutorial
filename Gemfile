@@ -33,6 +33,7 @@ group :test do
   gem 'guard',                    '2.13.0'
   gem 'guard-minitest',           '2.4.4'
   gem 'capybara',                 '2.15.2'
+  gem 'rack_session_access'
 end
 
 group :production do

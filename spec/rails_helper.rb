@@ -9,6 +9,8 @@ require 'rspec/rails'
 # 追加
 require 'capybara/rspec'
 require 'spec_helper'
+require 'support/helpers/test_helper'
+require 'rack_session_access/capybara'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -34,7 +36,9 @@ RSpec.configure do |config|
   # リスト 5.35により追加。spechelperに追加すべき？
   include ApplicationHelper
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  # config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.include FactoryBot::Syntax::Methods
+  config.include TestHelper
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false

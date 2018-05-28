@@ -10,4 +10,12 @@ class User < ApplicationRecord
   # password利用
   has_secure_password
   validates :password, presence: true, length: { minimum:6 }
+
+  # 渡された文字列のハッシュ値を返す
+  # リスト 8.21で作ったが、fixtureじゃなくてfactoryBot使う場合は不要っぽい
+  #def User.digest(string)
+  #  cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
+  #                            BCrypt::Engine.cost
+  #  BCrypt::Password.create(string, cost: cost)
+  #end
 end

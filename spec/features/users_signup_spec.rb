@@ -38,5 +38,9 @@ RSpec.feature "UsersSignup", type: :feature do
     # TODO flash[:success]を取得する方法
     expect(page).not_to have_selector 'div#error_explanation'
     expect(page).to have_selector 'div.alert', count: 1
+    # TODO ユーザ登録後のログインテスト(sessionを確認したい)
+    #expect(is_logged_in?).to be true
+    # とりあえずlogout_pathがあることでログインできていることを確認する
+    expect(page).to have_link href: logout_path
   end
 end

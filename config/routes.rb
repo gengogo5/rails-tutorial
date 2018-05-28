@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'sessions/new'
+
   get 'users/new'
 
   # パスとコントローラ#アクションの違いを意識すること
@@ -17,6 +19,11 @@ Rails.application.routes.draw do
   get '/contact', to: 'static_pages#contact'
   get '/signup', to: 'users#new'
   post '/signup', to: 'users#create'
+
+  # sessionリソースはresourcesでフルセットのルーティングを作成する必要なし
+  get '/login',   to: 'sessions#new'
+  post '/login',  to: 'sessions#create'
+  delete '/logout', to: 'sessions#destroy'
 
   # Usersリソースにアクションと名前付きルートを提供する
   resources :users

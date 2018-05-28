@@ -13,10 +13,13 @@ class UsersController < ApplicationController
     # Strong Parameters
     @user = User.new(user_params)
     if @user.save
+      # ユーザ作成時に自動的にログインする
+      log_in @user
       flash[:success] = "hogetterへようこそ!"
       # 下記は次と等価 redirect_to user_url(@user)
       redirect_to @user
     else
+      # エラー時はUserモデルのエラーメッセージが表示される
       render 'new'
     end
   end
