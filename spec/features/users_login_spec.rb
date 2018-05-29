@@ -63,10 +63,39 @@ RSpec.feature "UsersLogin", type: :feature do
 
     click_on 'ログアウト'
 
+    # 2番目のウインドウでログアウトをクリックするケースをシミュレート
+    page.driver.submit :delete, logout_path, {}
+
     expect(page).to have_current_path root_path
     expect(page).to have_link href: login_path
     expect(page).not_to have_link href: logout_path
     expect(page).not_to have_link href: user_path(user)
+  end
 
+  # リスト 9.25 ではログインをhelperに外出ししているので、
+  # とりあえずcapybara的な記述に直している
+  # 実際のところ何やってるかわかりづらいので、べた書きしたほうがいいのかも
+  scenario "remember_meでログイン" do
+    # 中でvisitとかfill_in, click_onをやっている
+    log_in_as(user, remember_me: '1')
+    # cookiesを直接使えなかったのでこれで対応
+    # あっているか自信なし…
+    cookie_value = page.driver.browser.rack_mock_session.cookie_jar['remember_token']
+    expect(cookie_value).not_to be_blank
+  end
+
+  scenario "remember_meをつけずにログイン" do
+    # クッキーを保存してログイン
+    log_in_as(user, remember_me: '1')
+    cookie_value_with_remember_me = page.driver.browser.rack_mock_session.cookie_jar['remember_token']
+    expect(cookie_value_with_remember_me).not_to be_blank
+
+    click_on 'ログアウト'
+
+    # クッキーを削除してログイン
+    log_in_as(user, remember_me: '0')
+
+    cookie_value_without_remember_me = page.driver.browser.rack_mock_session.cookie_jar['remember_token']
+    expect(cookie_value_without_remember_me).to be_blank
   end
 end

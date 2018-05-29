@@ -9,12 +9,15 @@ class SessionsController < ApplicationController
     # 入力されたメールアドレスがsessionに格納されている
     # メールアドレスでユーザを検索し、パスワードで認証する
     # paramsハッシュの中にsessionハッシュがある
-    user = User.find_by(email: params[:session][:email].downcase)
-    if user && user.authenticate(params[:session][:password])
+    @user = User.find_by(email: params[:session][:email].downcase)
+    if @user && @user.authenticate(params[:session][:password])
       # ログイン後にユーザ情報ページへリダイレクト
-      log_in user
+      log_in @user
+      # remember_meのチェックが入っている場合にrememberを
+      # チェックがない場合にforgetを呼び出す
+      params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
       # user_url(user)に変換されてユーザのプロフィールへリダイレクトされる
-      redirect_to user
+      redirect_to @user
     else
       # Active Recordのモデルを使っていない為、
       # ユーザ登録のようにエラーメッセージが表示できない
@@ -26,7 +29,8 @@ class SessionsController < ApplicationController
 
   # DELETE /logout
   def destroy
-    log_out
+    # ログイン中の場合にのみログアウトする
+    log_out if logged_in?
     redirect_to root_url
   end
 end

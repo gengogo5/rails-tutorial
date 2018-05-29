@@ -8,12 +8,29 @@ module SessionsHelper
     session[:user_id] = user.id
   end
 
+  # ユーザのセッションを永続的にする
+  def remember(user)
+    user.remember
+    # cookies.permanentで永続クッキーを作成
+    # signedで暗号化
+    cookies.permanent.signed[:user_id] = user.id
+    cookies.permanent[:remember_token] = user.remember_token
+  end
+
   # 現在ログイン中のユーザを返す(いる場合)
   def current_user
     # @current_userがnilなら右辺を実行、非nilなら@current_userを返す
     # 上記は無駄なデータベースアクセスを毎回行わない為のテクニック
     # User.findは、引数idがnilだと例外となるが、User.find_byならユーザが存在しない場合はnilが返る
-    @current_user ||= User.find_by(id: session[:user_id])
+    if (user_id = session[:user_id]) # 一時cookiesが存在する場合
+      @current_user ||= User.find_by(id: user_id)
+    elsif (user_id = cookies.signed[:user_id]) # 永続cookiesが存在する場合
+      user = User.find_by(id: user_id)
+      if user && user.authenticated?(cookies[:remember_token])
+        log_in user
+        @current_user = user
+      end
+    end
   end
 
   # ユーザがログインしていればtrue, その他ならfalseを返す
@@ -23,8 +40,16 @@ module SessionsHelper
     !current_user.nil?
   end
 
+  # 永続的セッションを破棄する
+  def forget(user)
+    user.forget
+    cookies.delete(:user_id)
+    cookies.delete(:remember_token)
+  end
+
   # 現在のユーザをログアウトする
   def log_out
+    forget(current_user)
     session.delete(:user_id)
     @current_user = nil
   end
