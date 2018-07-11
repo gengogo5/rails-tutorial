@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
       # チェックがない場合にforgetを呼び出す
       params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
       # user_url(user)に変換されてユーザのプロフィールへリダイレクトされる
-      redirect_to @user
+      redirect_back_or @user
     else
       # Active Recordのモデルを使っていない為、
       # ユーザ登録のようにエラーメッセージが表示できない

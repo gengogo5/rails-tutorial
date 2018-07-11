@@ -47,4 +47,31 @@ RSpec.feature "ユーザ情報更新", type: :feature do
     expect(user.email).to eq email
 
   end
+
+  scenario "フレンドリーフォワーディングされること" do
+    visit edit_user_path(user)
+    expect(page).to have_current_path login_path
+
+    fill_in 'メールアドレス', with: user.email
+    fill_in 'パスワード', with: 'password'
+    within ".row" do
+      click_on 'ログイン'
+    end
+    expect(page).to have_current_path edit_user_path(user)
+
+    name = "Foo Bar"
+    email = "foo@bar.com"
+
+    fill_in :user_name , with: name
+    fill_in :user_email, with: email
+    fill_in :user_password, with: ""
+    fill_in :user_password_confirmation, with: ""
+
+    click_on '更新する'
+
+    user.reload
+    expect(user.name).to eq name
+    expect(user.email).to eq email
+  end
+
 end
