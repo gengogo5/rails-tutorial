@@ -6,4 +6,11 @@ FactoryBot.define do
     password 'password'
     password_confirmation 'password' # 無くても動いた
   end
+
+  factory :archer, class: User do
+    name 'Sterling Archer'
+    email 'duchess@exeample.gov'
+    password 'password'
+    password_confirmation 'password'
+  end
 end

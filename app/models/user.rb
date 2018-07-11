@@ -10,7 +10,7 @@ class User < ApplicationRecord
              uniqueness: { case_sensitive: false }
   # password利用
   has_secure_password
-  validates :password, presence: true, length: { minimum:6 }
+  validates :password, presence: true, length: { minimum:6 }, allow_nil: true
 
   # 渡された文字列のハッシュ値を返す
   # User.digest, self.digest, class << self def digest の3通リの書き方がある

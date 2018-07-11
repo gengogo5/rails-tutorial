@@ -1,6 +1,7 @@
 require 'rails_helper'
 
-#TODO Context,letを使う書き方
+# TODO Context,letを使う書き方
+# TODO FactoryBotを使う方に変えるか
 # describeを綺麗に入れ子にしたら見やすいはず
 RSpec.describe User, type: :model do
 

@@ -21,7 +21,7 @@ module SampleApp
         view_specs: false,
         helper_specs: false,
         routing_specs: false,
-        request_specs: false
+        controller_specs: false
     end
 
     # メッセージ日本語化

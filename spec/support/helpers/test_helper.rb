@@ -11,9 +11,12 @@ module TestHelper
 
   # テストユーザとしてログインする
   # 10章で使うらしい
-  #def log_in_as(user)
-  #  session[:user_id] = user.id
-  #end
+  # TODO 名前は後で変える
+  def login_as(user, password: 'password')
+    #session[:user_id] = user.id
+    post login_path, params:{ session: {email: user.email,
+                                         password: password }}
+  end
 
   # テストユーザとしてログインする
   # capybaraでログインする用
