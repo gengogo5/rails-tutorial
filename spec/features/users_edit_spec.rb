@@ -69,9 +69,30 @@ RSpec.feature "ユーザ情報更新", type: :feature do
 
     click_on '更新する'
 
+    expect(page).not_to have_selector "div#error_explanation"
+    expect(page).to have_current_path user_path(user)
+
     user.reload
     expect(user.name).to eq name
     expect(user.email).to eq email
+  end
+
+  scenario "フレンドリーフォワーディングが初回ログインのみ有効であること" do
+
+    visit edit_user_path(user)
+    expect(page).to have_current_path login_path
+
+    fill_in 'メールアドレス', with: user.email
+    fill_in 'パスワード', with: 'password'
+    within ".row" do
+      click_on 'ログイン'
+    end
+    expect(page).to have_current_path edit_user_path(user)
+
+    click_on 'ログアウト'
+
+    log_in_as(user)
+    expect(page).to have_current_path user_path(user)
   end
 
 end

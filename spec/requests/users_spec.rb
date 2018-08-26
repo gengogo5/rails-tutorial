@@ -9,6 +9,13 @@ RSpec.describe "Users", type: :request do
     end
   end
 
+  context "ログインせずにusers_pathにアクセスした場合" do
+    it "login_pathにリダイレクトされること" do
+      get users_path
+      expect(response).to redirect_to login_path
+    end
+  end
+
   context "ログインせずにedit画面に遷移した場合" do
     let(:user) { create(:michael) }
 

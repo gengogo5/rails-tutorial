@@ -7,6 +7,8 @@ feature "サイトレイアウトの確認" do
   background do
   end
 
+  let(:user){ create(:michael) }
+
   # itはscenarioに
   scenario "リンクの確認" do
     # root_pathは'/'を返すメソッド
@@ -35,8 +37,15 @@ feature "サイトレイアウトの確認" do
     # 演習5.4.2
     visit signup_path
     expect(page).to have_title full_title("Sign up")
+  end
 
+  scenario "ログイン後のリンクの確認" do
 
+    log_in_as(user)
+    expect(page).to have_link  href: users_path
+    expect(page).to have_link  href: user_path(user)
+    expect(page).to have_link  href: edit_user_path(user)
+    expect(page).to have_link  href: logout_path
   end
 
 end
